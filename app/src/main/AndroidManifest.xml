@@ -20,8 +20,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.ScannedBarcodeActivity"></activity>
-        <activity android:name=".ui.ScanActivity" />
-        <activity android:name=".ui.BarcodeActivity" />
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait"
