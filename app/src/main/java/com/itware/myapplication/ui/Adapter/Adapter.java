@@ -1,7 +1,9 @@
-package com.itware.myapplication.ui;
+package com.itware.myapplication.ui.Adapter;
 
 
 import android.app.Activity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +13,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.itware.myapplication.R;
+import com.itware.myapplication.ui.MainActivity;
 import com.itware.myapplication.ui.models.AnswerMast;
 import com.itware.myapplication.ui.models.SurverDataModel;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implements AdapterView.OnItemSelectedListener {
 
     private ArrayList<SurverDataModel> list ;
     private Activity mActvity;
     private  ArrayList<AnswerMast> a2;
+    private ArrayList<MyViewHolder> mHolder = new ArrayList<>();
 
     public Adapter(Activity activity, ArrayList<SurverDataModel> list) {
         this. list = list;
@@ -36,7 +39,7 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+        //todo write function for selected item
     }
 
     @Override
@@ -72,14 +75,15 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(MyViewHolder holder, final int position) {
 
+        mHolder.add(holder);
         holder.textView.setText(list.get(position).getQuestion());
 
 
         AnswerMast answerMast = new AnswerMast();
         answerMast.setAnswer("Select");
-
+        answerMast.setAid("00");
         Log.i("swapna","success"+list.get(position).getControlType());
         if (list.get(position).getControlType().equalsIgnoreCase("Dropdown")){
             holder.edit.setVisibility(View.GONE);
@@ -90,6 +94,8 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
             holder.edit.setVisibility(View.GONE);
             holder.spinner.setVisibility(View.GONE);
         }else {
+
+//            holder.edit.setError(list.get(position).getRequiredValidatorMessage());
             holder.edit.setVisibility(View.VISIBLE);
             holder.spinner.setVisibility(View.GONE);
             holder.linear.setVisibility(View.GONE);
@@ -103,6 +109,30 @@ public class Adapter extends RecyclerView.Adapter<Adapter.MyViewHolder> implemen
         SpinnerAdapter spinnerAdapter = new SpinnerAdapter(mActvity, a2);
         holder.spinner.setAdapter(spinnerAdapter);
 
+    }
+
+    public boolean validateUi(){
+        for (int i = 0; i < list.size(); i++){
+            if (list.get(i).getControlType().equalsIgnoreCase("Dropdown")){
+                if(mHolder.get(i).spinner.getSelectedItemPosition() == 0){
+                    Toast.makeText(mActvity, list.get(i).getRequiredValidatorMessage(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }else if (list.get(i).getQuestion().equalsIgnoreCase( "Mobile Number")){
+                if(mHolder.get(i).phone.getText().toString().length() < 10){
+                    Toast.makeText(mActvity, list.get(i).getRequiredValidatorMessage(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }else {
+                if(mHolder.get(i).edit.getText().toString().length() == 0){
+                    Toast.makeText(mActvity, list.get(i).getRequiredValidatorMessage(), Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
     }
 
 

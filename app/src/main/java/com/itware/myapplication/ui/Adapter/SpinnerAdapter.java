@@ -1,4 +1,4 @@
-package com.itware.myapplication.ui;
+package com.itware.myapplication.ui.Adapter;
 
 import android.content.Context;
 import android.util.Log;

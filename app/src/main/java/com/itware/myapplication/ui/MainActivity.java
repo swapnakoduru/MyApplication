@@ -15,6 +15,7 @@ import android.widget.Button;
 import com.itware.myapplication.Common.APIClient;
 import com.itware.myapplication.Common.APIInterface;
 import com.itware.myapplication.R;
+import com.itware.myapplication.ui.Adapter.Adapter;
 import com.itware.myapplication.ui.models.ModelClass;
 import com.itware.myapplication.ui.models.SurverDataModel;
 
@@ -44,7 +45,12 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, ScannedBarcodeActivity.class));
+
+                Log.e("validate","is"+adapter.validateUi());
+                if (adapter.validateUi() == true)
+                {
+                    startActivity(new Intent(MainActivity.this, ScannedBarcodeActivity.class));
+                }
             }
         });
     }
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         alert.show();
 
     }
+
 
     public void getList() {
         HashMap<String, String> header = new HashMap<String, String>();
@@ -97,4 +104,5 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
 }
